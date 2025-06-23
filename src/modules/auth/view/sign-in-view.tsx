@@ -19,6 +19,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import { FaGoogle, FaGithub } from "react-icons/fa";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -47,8 +48,27 @@ export const SignInView = () => {
       },
       {
         onSuccess: () => {
-          setPending(false);
           router.push("/");
+          setPending(false);
+        },
+        onError: ({ error }) => {
+          setPending(false);
+          setError(error.message);
+        },
+      }
+    );
+  };
+  const onSocial = (provider: "github" | "google") => {
+    setError(null);
+    setPending(true);
+    authClient.signIn.social(
+      {
+        provider: provider,
+        callbackURL: "/",
+      },
+      {
+        onSuccess: () => {
+          setPending(false);
         },
         onError: ({ error }) => {
           setPending(false);
@@ -123,11 +143,23 @@ export const SignInView = () => {
                   </span>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <Button className="w-full" variant="outline" type="button">
-                    Google
+                  <Button
+                    disabled={pending}
+                    onClick={() => onSocial("google")}
+                    className="w-full"
+                    variant="outline"
+                    type="button"
+                  >
+                    <FaGoogle />
                   </Button>
-                  <Button className="w-full" variant="outline" type="button">
-                    Github
+                  <Button
+                    disabled={pending}
+                    onClick={() => onSocial("github")}
+                    className="w-full"
+                    variant="outline"
+                    type="button"
+                  >
+                    <FaGithub />
                   </Button>
                 </div>
                 <div className="text-center text-sm">

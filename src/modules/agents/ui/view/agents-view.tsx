@@ -9,7 +9,18 @@ export const AgentsView = () => {
   const trpc = useTRPC();
   const { data } = useSuspenseQuery(trpc.agents.getMany.queryOptions());
 
-  return <div>{JSON.stringify(data, null, 2)}</div>;
+  return (
+    // <ResponsiveDialog
+    //   title="Responsive test"
+    //   description="Responsive Description"
+    //   open
+    //   onOpenChange={() => {}}
+    // >
+    //   <Button>Some action</Button>
+    //   {JSON.stringify(data, null, 2)}
+    // </ResponsiveDialog>
+    <div>{JSON.stringify(data, null, 2)}</div>
+  );
 };
 
 export const AgentsViewLoading = () => {
